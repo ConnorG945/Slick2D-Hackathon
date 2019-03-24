@@ -10,14 +10,30 @@ import org.newdawn.slick.geom.ShapeRenderer;
 
 public class mainMenu extends BasicGameState {
     //Extend from BasicGameState so we can have the window created
-   // public String mouse = "No input yet!";
+    // public String mouse = "No input yet!";
+    Input input;
+    int xpos;
+    int ypos;
     public boolean a=false;
     public boolean b=false;
     public boolean c=false;
     public boolean d=false;
     public boolean e=false;
     public boolean f=false;
-
+    Image img;
+    Shape Rect1;
+    Shape Rect2;
+    Shape Rect3;
+    Shape Rect4;
+    Shape Rect5;
+    Shape Rect6;
+    Color color1;
+    Color color2;
+    Color color3;
+    Font awtFont;
+    TrueTypeFont font;
+    GradientFill filler1;
+    GradientFill filler2;
 
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
@@ -29,6 +45,22 @@ public class mainMenu extends BasicGameState {
 
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         //2nd Method Declared
+        input = gc.getInput();
+        img = new Image("res/thumbnail.png");
+        Rect1=new RoundedRectangle(168,175,500,63,20);
+        Rect2=new RoundedRectangle(239,252,320,63,20);
+        Rect3=new RoundedRectangle(208,327,404,63,20);
+        Rect4=new RoundedRectangle(168,172,500,70,20);
+        Rect5=new RoundedRectangle(239,249,320,70,20);
+        Rect6=new RoundedRectangle(208,324,404,70,20);
+        color1=new Color(150,115,0);
+        color2=new Color(171,128,1);
+        color3=new Color(58,36,1);
+        awtFont = new Font("TimesRoman", Font.PLAIN, 60);
+        font = new TrueTypeFont(awtFont, false);
+        filler1=new GradientFill(100,200,color1,500,300,color1);
+        filler2=new GradientFill(100,200,color2,500,300,color2);
+
         //Takes a GameContainer and a StateBasedGame object as parameters
         //We declare a new object of the Image clas; the picture we will be using
 
@@ -51,36 +83,22 @@ public class mainMenu extends BasicGameState {
         //Now we're going to take the mouse location and store it as a variable, and print it wherever the mouse is\n"
         // +
 
-        int xpos = Mouse.getX();
-        int ypos = Mouse.getY();
-        Image img = new Image("res/thumbnail.png");
+
         img.draw(0,5);
         //Image face=new Image("Pictures/TreePic.png");
         //g.drawImage(face,500,50);
-        Font awtFont = new Font("TimesRoman", Font.PLAIN, 60);
-        TrueTypeFont font = new TrueTypeFont(awtFont, false);
-        Color color1=new Color(150,115,0);
-        Color color2=new Color(171,128,1);
-        Color color3=new Color(58,36,1);
-        GradientFill filler2=new GradientFill(100,200,color2,500,300,color2);
-        Shape Rect1=new RoundedRectangle(168,175,500,63,20);
-        Shape Rect2=new RoundedRectangle(239,252,320,63,20);
-        Shape Rect3=new RoundedRectangle(208,327,404,63,20);
-        Shape Rect4=new RoundedRectangle(168,172,500,70,20);
-        Shape Rect5=new RoundedRectangle(239,249,320,70,20);
-        Shape Rect6=new RoundedRectangle(208,324,404,70,20);
+
         g.fill(Rect1,filler2);
         g.fill(Rect2,filler2);
         g.fill(Rect3,filler2);
         g.setColor(color3);
         g.draw(Rect1);
-        g .draw(Rect2);
+        g.draw(Rect2);
         g.draw(Rect3);
         font.drawString(260, 50, "Trash Hero", Color.yellow);
         font.drawString(255, 175, "Start Game", color3);
         font.drawString(290, 250, "Credits", color3);
         font.drawString(280, 325, "Controls", color3);
-        GradientFill filler1=new GradientFill(100,200,color1,500,300,color1);
         if(a)
             sbg.enterState(3);
         if(b)
@@ -116,11 +134,8 @@ public class mainMenu extends BasicGameState {
         //4th Method; Takes 3 parameters; Updates images on screen; Essentially allows for stuff to move around/ have
         //animation on screen
 
-        int xpos = Mouse.getX();
-        int ypos = Mouse.getY();
-        Input input;
-        input = gc.getInput();
-        String mouse = "Mouse position x: " + xpos + " y: " + ypos;
+         xpos = Mouse.getX();
+         ypos = Mouse.getY();
 
         if(xpos<=668&&xpos>=168&&ypos<=325&&ypos>=262&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
             a=true;
@@ -159,4 +174,3 @@ public class mainMenu extends BasicGameState {
         return 0;
     }
 }
-
