@@ -1,93 +1,162 @@
-package slick2d.test;
+package com.company;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.lwjgl.input.Mouse;
 import java.awt.Font;
+import org.newdawn.slick.geom.*;
+import org.newdawn.slick.fills.GradientFill;
+import org.newdawn.slick.geom.ShapeRenderer;
 
 
 public class mainMenu extends BasicGameState {
-   //Extend from BasicGameState so we can have the window created
-  // public String mouse = "No input yet!";
-   public boolean a=false;
-   public boolean b=false;
-   public boolean c=false;
-
-   public mainMenu(int state) {
-       //1st Method Declared
-       //Constructor that accepts the parameters of the game state for mainMenu, so 0;
-
-   }
-
-   public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-       //2nd Method Declared
-
-   }
-
-   public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-       //3rd Method; Render allows for graphics; Graphics ALWAYS has the variable g; Text can be drawn with it
-
-       Image img = new Image("res/thumbnail.png");
-       img.draw(0,5);
-
-       Font awtFont = new Font("Times New Roman", Font.PLAIN, 60);
-       TrueTypeFont font = new TrueTypeFont(awtFont, false);
-       font.drawString(230, 50, "TRASH HERO", Color.yellow);
-       font.drawString(225, 175, "START GAME", Color.red);
-       font.drawString(275, 250, "CREDITS", Color.blue);
-       font.drawString(250, 325, "CONTROLS", Color.magenta);
-       if(a)
-           sbg.enterState(1);
-       if(b)
-           sbg.enterState(2);
-       if(c)
-           sbg.enterState(3);
+    //Extend from BasicGameState so we can have the window created
+   // public String mouse = "No input yet!";
+    public boolean a=false;
+    public boolean b=false;
+    public boolean c=false;
+    public boolean d=false;
+    public boolean e=false;
+    public boolean f=false;
 
 
+    //A public string that will constantly be updated to show the mouse coordinates
+    //We declare a new image and variables for it. We proceed to the init method
+    public mainMenu(int state) {
+        //1st Method Declared
+        //Constructor that accepts the parameters of the game state for mainMenu, so 0;
 
-       //We set a public string variable named mouse so that we can use it
-       //We go to the update method so that we can get the x and y coords of the mouse that Java already is reading
+    }
+
+    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        //2nd Method Declared
+        //Takes a GameContainer and a StateBasedGame object as parameters
+        //We declare a new object of the Image clas; the picture we will be using
+
+    }
+
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+        //3rd Method; Render allows for graphics; Graphics ALWAYS has the variable g; Text can be drawn with it
+        //And so can images
+        // g.drawString("u wanna get fortnited on",69,100);
+        //Java Coordinates = Begins at top left, goes increases downward and increases rightward
+        //g.drawRect(69,100,225,20);
+        //drawRect begins at the specified x,y coords and extends for w pixels in the x and h pixel in the y
+        //g.drawOval(100,100,50,100);
+        //Same idea for drawOval as drawRect and other shapes
+        //Image kira = new Image("res/memeKira.png");
+        //g.drawImage(kira,0,0);
+        //We create a new object of the image class, Kira and reference the image memeKira.
+        //We draw the image from the origin
+        //I'm commenting it out because the picture goes over the other parts
+        //Now we're going to take the mouse location and store it as a variable, and print it wherever the mouse is\n"
+        // +
+
+        int xpos = Mouse.getX();
+        int ypos = Mouse.getY();
+        Image img = new Image("res/thumbnail.png");
+        img.draw(0,5);
+        //Image face=new Image("Pictures/TreePic.png");
+        //g.drawImage(face,500,50);
+        Font awtFont = new Font("TimesRoman", Font.PLAIN, 60);
+        TrueTypeFont font = new TrueTypeFont(awtFont, false);
+        Color color1=new Color(150,115,0);
+        Color color2=new Color(171,128,1);
+        Color color3=new Color(58,36,1);
+        GradientFill filler2=new GradientFill(100,200,color2,500,300,color2);
+        Shape Rect1=new RoundedRectangle(168,175,500,63,20);
+        Shape Rect2=new RoundedRectangle(239,252,320,63,20);
+        Shape Rect3=new RoundedRectangle(208,327,404,63,20);
+        Shape Rect4=new RoundedRectangle(168,172,500,70,20);
+        Shape Rect5=new RoundedRectangle(239,249,320,70,20);
+        Shape Rect6=new RoundedRectangle(208,324,404,70,20);
+        g.fill(Rect1,filler2);
+        g.fill(Rect2,filler2);
+        g.fill(Rect3,filler2);
+        g.setColor(color3);
+        g.draw(Rect1);
+        g .draw(Rect2);
+        g.draw(Rect3);
+        font.drawString(260, 50, "Trash Hero", Color.yellow);
+        font.drawString(255, 175, "Start Game", color3);
+        font.drawString(290, 250, "Credits", color3);
+        font.drawString(280, 325, "Controls", color3);
+        GradientFill filler1=new GradientFill(100,200,color1,500,300,color1);
+        if(a)
+            sbg.enterState(3);
+        if(b)
+            sbg.enterState(1);
+        if(c)
+            sbg.enterState(2);
+        if(d){
+            g.fill(Rect4,filler1);
+            font.drawString(255, 175, "Start Game", color3);}
+        if(e){
+            g.fill(Rect5,filler1);
+            font.drawString(290, 250, "Credits", color3);}
+        if(f){
+            g.fill(Rect6,filler1);
+            font.drawString(280, 325, "Controls", color3);
+
+        }
 
 
-       //KeyBoard Input Arc
-       //We draw this image as the sprite that will be moving
-       //Now we have to write code so that it can update as it works
+
+        //We set a public string variable named mouse so that we can use it
+        //We go to the update method so that we can get the x and y coords of the mouse that Java already is reading
 
 
-   }
-
-   public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-       //4th Method; Takes 3 parameters; Updates images on screen; Essentially allows for stuff to move around/ have
-       //animation on screen
-
-       int xpos = Mouse.getX();
-       int ypos = Mouse.getY();
-       Input input;
-       input = gc.getInput();
-       //mouse = "Mouse position x: " + xpos + " y: " + ypos;
-
-       if(xpos<=524&&xpos>=274&&ypos<=236&&ypos>=194&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
-           a=true;
-       else
-           a=false;
-       if(xpos<=563&&xpos>=250&&ypos<=161&&ypos>=117&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
-           b=true;
-       else
-           b=false;
-       if(xpos<=603&&xpos>=227&&ypos<=314&&ypos>=268&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
-           c=true;
-       else
-           c=false;
+        //KeyBoard Input Arc
+        //We draw this image as the sprite that will be moving
+        //Now we have to write code so that it can update as it works
 
 
-       //Gets x and y coords, and constantly updates the mouse string so that at 50,50, it prints the string
-       //That prints the coordinates
-       //Should be noted that Slick2D and lwjgl begin their coordinates at the bottom left of the screen,
-       //We typically begin at top left because of how we form the window. Just keep in mind
-   }
+    }
 
-   public int getID() {
-       //5th Method; Method that returns the ID of this state; Since mainMenu has ID 0, it returns 0
-       return 0;
-   }
+    public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        //4th Method; Takes 3 parameters; Updates images on screen; Essentially allows for stuff to move around/ have
+        //animation on screen
+
+        int xpos = Mouse.getX();
+        int ypos = Mouse.getY();
+        Input input;
+        input = gc.getInput();
+        String mouse = "Mouse position x: " + xpos + " y: " + ypos;
+
+        if(xpos<=668&&xpos>=168&&ypos<=325&&ypos>=262&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
+            a=true;
+        else
+            a=false;
+        if(xpos<=559&&xpos>=239&&ypos<=245&&ypos>=182&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
+            b=true;
+        else
+            b=false;
+        if(xpos<=607&&xpos>=204&&ypos<=170&&ypos>=107&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
+            c=true;
+        else
+            c=false;
+        if(xpos<=668&&xpos>=168&&ypos<=325&&ypos>=262)
+            d=true;
+        else
+            d=false;
+        if(xpos<=559&&xpos>=239&&ypos<=245&&ypos>=182)
+            e=true;
+        else
+            e=false;
+        if(xpos<=607&&xpos>=204&&ypos<=170&&ypos>=107)
+            f=true;
+        else
+            f=false;
+
+
+        //Gets x and y coords, and constantly updates the mouse string so that at 50,50, it prints the string
+        //That prints the coordinates
+        //Should be noted that Slick2D and lwjgl begin their coordinates at the bottom left of the screen,
+        //We typically begin at top left because of how we form the window. Just keep in mind
+    }
+
+    public int getID() {
+        //5th Method; Method that returns the ID of this state; Since mainMenu has ID 0, it returns 0
+        return 0;
+    }
 }
 
