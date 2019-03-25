@@ -15,6 +15,8 @@ public class game extends BasicGameState {
     int score;
     Trash[] garbage;
     Trash trashCan;
+    Trash boots;
+    int boot;
     Image[] things;
     Image sal;
     Image front;
@@ -26,7 +28,7 @@ public class game extends BasicGameState {
     Font awtFont;
     TrueTypeFont font;
     Input input;
-    Trash[] powerUps;
+    Trash[] clocks;
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
     public game(int state) {
@@ -57,6 +59,10 @@ public class game extends BasicGameState {
         font=new TrueTypeFont(awtFont, false);
         //This is the trash can image and where it is located on the screen.
         trashCan = new Trash(new Image("res/trash can 1.png"),410,220);
+        //Generates the boots.
+        boots = new Trash(new Image("res/boots2.png"),1000,random(260,460));
+        //The boot number to be added to the speed.
+        boot=0;
         //The background image.
         backGround = new Image("res/park.png");
         //The player image
@@ -70,12 +76,13 @@ public class game extends BasicGameState {
         for(int i=0;i<garbage.length;i++)
             garbage[i]=new Trash(things[random(1,4)-1],random(40,760),random(260,460));
 
-        //Generates the powerUps.
-        powerUps = new Trash[2];
-        for(int i=0;i<powerUps.length;i++)
+        //Generates the clocks.
+        clocks = new Trash[2];
+        for(int i=0;i<clocks.length;i++)
         {
-            powerUps[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
+            clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
         }
+
         //2nd Method Declared
         //Takes a GameContainer and a StateBasedGame object as parameters
         //We declare a new object of the Image clas; the picture we will be using
@@ -88,13 +95,11 @@ public class game extends BasicGameState {
         //Draws all of the garbage.
         for(int i=0;i<garbage.length;i++)
             g.drawImage(garbage[i].getG(),garbage[i].getX(),garbage[i].getY());
-
-
-        //Draws the power ups
-        for(int i=0;i<powerUps.length;i++)
-            g.drawImage(powerUps[i].getG(),powerUps[i].getX(),powerUps[i].getY());
-
-
+        //Draws the clocks
+        for(int i=0;i<clocks.length;i++)
+            g.drawImage(clocks[i].getG(),clocks[i].getX(),clocks[i].getY());
+        //Draws the boots
+        g.drawImage(boots.getG(),boots.getX(),boots.getY());
         //Draws the trash can.
         g.drawImage(trashCan.getG(),trashCan.getX(),trashCan.getY());
         //Draws the player.
@@ -143,13 +148,17 @@ public class game extends BasicGameState {
             //Garbage is placed in random positions.
             for(int i=0;i<garbage.length;i++)
                 garbage[i]=new Trash(things[random(1,4)-1],random(40,760),random(260,460));
-            for(int i=0;i<powerUps.length;i++)
-                powerUps[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
-
+            //Clocks are placed in random positions
+            for(int i=0;i<clocks.length;i++)
+                clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
+            //Boots are placed in a random position
+            boots = new Trash(new Image("res/boots2.png"),1000,random(260,460));
             //Running time is reset back to 0.
             runningTime=0;
             //Inventory is reset back to 0;
             inventory=0;
+            //Resets boot to 0.
+            boot=0;
             //Player is spawned at the center of the screen.
             salX=410;
             salY=400;
@@ -157,11 +166,16 @@ public class game extends BasicGameState {
         //This keeps track of the running time in milliseconds.
         runningTime+=delta;
 
+        //Boots spawning
+        if(boots.getX()==1000&&runningTime>15000) {
+            boots.setX(random(40, 760));
+        }
+
         //PowerUps spawning
-        for(int i=0;i<powerUps.length;i++)
+        for(int i=0;i<clocks.length;i++)
         {
-            if (powerUps[i].getX() == 1000 && runningTime > 10000 + (i*10000)) {
-                powerUps[i].setX(random(40, 760));
+            if (clocks[i].getX() == 1000 && runningTime > 10000 + (i*10000)) {
+                clocks[i].setX(random(40, 760));
             }
         }
        /*WASD controls the character. The speed is affected by the inventory,
@@ -170,19 +184,19 @@ public class game extends BasicGameState {
        */
        if(runningTime<30000) {
            if (input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
-               salX += 4 - inventory;
+               salX += 4 - inventory + boot;
                sal = right;
            }
            if (input.isKeyDown(Input.KEY_A) && salX > 0) {
-               salX -= 4 - inventory;
+               salX -= 4 - inventory + boot;
                sal = left;
            }
            if (input.isKeyDown(Input.KEY_W) && salY > 220) {
-               salY -= 4 - inventory;
+               salY -= 4 - inventory + boot;
                sal = back;
            }
            if (input.isKeyDown(Input.KEY_S) && salY < 500 - 32) {
-               salY += 4 - inventory;
+               salY += 4 - inventory + boot;
                sal = front;
            }
        }
@@ -202,12 +216,17 @@ public class game extends BasicGameState {
             }
         }
         //Collision detection for powerUps. If a clock is collected, 5 seconds will be added to the time.
-        for(int i=0;i<powerUps.length;i++)
+        for(int i=0;i<clocks.length;i++)
         {
-                if(salX>powerUps[i].getX()-10&&  salX<powerUps[i].getX()+28&&  salY>powerUps[i].getY()-26&&  salY<powerUps[i].getY()+20) {
-                    powerUps[i].setX(900);
+                if(salX>clocks[i].getX()-10&&  salX<clocks[i].getX()+28&&  salY>clocks[i].getY()-26&&  salY<clocks[i].getY()+20) {
+                    clocks[i].setX(900);
                     runningTime-=5000;
                 }
+        }
+        //Collision detection for the boots.
+        if(salX>boots.getX()-10&&  salX<boots.getX()+28&&  salY>boots.getY()-26&&  salY<boots.getY()+20) {
+            boots.setX(900);
+            boot=2;
         }
         //If the player collides with the trash can, the inventory is reset back to 0.
         if(salX>trashCan.getX()-14&&salX<trashCan.getX()+30&&salY>trashCan.getY()-5&&salY<trashCan.getY()+30) {
