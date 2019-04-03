@@ -249,7 +249,8 @@ public class game extends BasicGameState {
         //This keeps track of the running time in milliseconds.
         runningTime+=delta;
 
-        
+        if(hasBoots)
+            boot=2;
 
         //Clocks spawning
         for(int i=0;i<clocks.length;i++)
