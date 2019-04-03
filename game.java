@@ -29,6 +29,17 @@ public class game extends BasicGameState {
     TrueTypeFont font;
     Input input;
     Trash[] clocks;
+    boolean inShop;
+    Image shop;
+    Trash backpack;
+    Trash net;
+    Trash clock;
+    int items;
+    Image[] ups;
+    boolean hasBackpack;
+    boolean hasBoots;
+    boolean hasClock;
+    boolean hasNet;
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
     public game(int state) {
@@ -60,7 +71,7 @@ public class game extends BasicGameState {
         //This is the trash can image and where it is located on the screen.
         trashCan = new Trash(new Image("res/trash can 1.png"),410,220);
         //Generates the boots.
-        boots = new Trash(new Image("res/boots2.png"),1000,random(260,460));
+        boots = new Trash(new Image("res/boots2.png"), 395, 385);
         //The boot number to be added to the speed.
         boot=0;
         //The background image.
@@ -82,7 +93,17 @@ public class game extends BasicGameState {
         {
             clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
         }
-
+        inShop=false;
+        shop= new Image("res/shop.png");
+        backpack= new Trash(new Image("res/backpack.png"),94, 165);
+        net=new Trash(new Image("res/net.png"),388, 163);
+        clock=new Trash(new Image("res/clock.png"), 98, 385);
+        items=0;
+        ups=new Image[4];
+        hasBackpack=false;
+        hasBoots=false;
+        hasClock=false;
+        hasNet=false;
         //2nd Method Declared
         //Takes a GameContainer and a StateBasedGame object as parameters
         //We declare a new object of the Image clas; the picture we will be using
@@ -98,29 +119,47 @@ public class game extends BasicGameState {
         //Draws the clocks
         for(int i=0;i<clocks.length;i++)
             g.drawImage(clocks[i].getG(),clocks[i].getX(),clocks[i].getY());
-        //Draws the boots
-        g.drawImage(boots.getG(),boots.getX(),boots.getY());
         //Draws the trash can.
         g.drawImage(trashCan.getG(),trashCan.getX(),trashCan.getY());
         //Draws the player.
         g.drawImage(sal,salX,salY);
 
         //Draws the current level.
-        font.drawString(520, 30, "Level: "+level, Color.black);
+        font.drawString(520, 20, "Level: "+level, Color.black);
         //Draws the player's score.
-        font.drawString(300, 30, "Score: "+score, Color.black);
+        font.drawString(300, 20, "Score: "+score, Color.black);
        /*Draws the player's time remaining starting from 30 and counting down.
          It starts as black, but when there are 15 seconds remaining, the color changes to orange,
          and when there is 5 seconds remaining, the color changes to red.*/
         if(runningTime>15000)
         {
             if(runningTime>25000)
-                font.drawString(50, 30, "Time: "+(30-runningTime/1000), Color.red);
+                font.drawString(50, 20, "Time: "+(30-runningTime/1000), Color.red);
             else
-                font.drawString(50, 30, "Time: "+(30-runningTime/1000), Color.orange);
+                font.drawString(50, 20, "Time: "+(30-runningTime/1000), Color.orange);
         }
         else
-            font.drawString(50, 30, "Time: "+(30-runningTime/1000), Color.black);
+            font.drawString(50, 20, "Time: "+(30-runningTime/1000), Color.black);
+        
+        font.drawString(50, 60, "Items:", Color.black);
+        for(int i=0;i<items;i++)
+        {
+            g.drawImage(ups[i],160+30*i,77);
+        }
+        
+        if(inShop)
+        {
+            g.drawImage(shop,0,0);
+            if(!hasBackpack)
+                g.drawImage(backpack.getG(),backpack.getX(),backpack.getY());
+            if(!hasNet)
+                g.drawImage(net.getG(),net.getX(),net.getY());
+            if(!hasBoots)
+                g.drawImage(boots.getG(),boots.getX(),boots.getY());
+            if(!hasClock)
+                g.drawImage(clock.getG(),clock.getX(),clock.getY());
+            g.drawImage(sal,salX,salY);
+        }
         //When the player beats level 4, the win image will be drawn.
         if(level==5)
         {
@@ -141,37 +180,78 @@ public class game extends BasicGameState {
         //If a player has beat a level, it resets everything and moves to the next level.
         if(win(garbage,inventory))
         {
-            //Increases the level.
-            level++;
-            //The amount of garbage will increase by 4 every level.
-            garbage = new Trash[level*4];
-            //Garbage is placed in random positions.
-            for(int i=0;i<garbage.length;i++)
-                garbage[i]=new Trash(things[random(1,4)-1],random(40,760),random(260,460));
-            //Clocks are placed in random positions
-            for(int i=0;i<clocks.length;i++)
-                clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
-            //Boots are placed in a random position
-            boots = new Trash(new Image("res/boots2.png"),1000,random(260,460));
-            //Running time is reset back to 0.
-            runningTime=0;
-            //Inventory is reset back to 0;
-            inventory=0;
-            //Resets boot to 0.
-            boot=0;
-            //Player is spawned at the center of the screen.
-            salX=410;
-            salY=400;
+            if(!inShop){
+            salX=5;
+            salY=265;
+            }
+            inShop=true;
+            if(inShop)
+            {
+                if(input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
+                salX += 2;
+                sal = right;
+                }
+                if(input.isKeyDown(Input.KEY_A) && salX > 0) {
+                salX -= 2;
+                sal = left;
+                }
+                if(input.isKeyDown(Input.KEY_W) && salY > 100) {
+                salY -= 2;
+                sal = back;
+                }
+                if(input.isKeyDown(Input.KEY_S) && salY < 500 - 32) {
+                salY += 2;
+                sal = front;
+                }
+                if(!hasBackpack&&salX>backpack.getX()-10&&  salX<backpack.getX()+28&&  salY>backpack.getY()-26&&  salY<backpack.getY()+20) {
+                    hasBackpack=true;
+                    ups[items]=backpack.getG();
+                    items++;
+                }
+                if(!hasNet&&salX>net.getX()-10&&  salX<net.getX()+28&&  salY>net.getY()-26&&  salY<net.getY()+20) {
+                    hasNet=true;
+                    ups[items]=net.getG();
+                    items++;
+                }
+                if(!hasBoots&&salX>boots.getX()-10&&  salX<boots.getX()+28&&  salY>boots.getY()-26&&  salY<boots.getY()+20) {
+                    hasBoots=true;
+                    ups[items]=boots.getG();
+                    items++;
+                }
+                if(!hasClock&&salX>clock.getX()-10&&  salX<clock.getX()+28&&  salY>clock.getY()-26&&  salY<clock.getY()+20) {
+                    hasClock=true;
+                    ups[items]=clock.getG();
+                    items++;
+                }
+                if(salX>650){
+                inShop=false;
+                //Increases the level.
+                level++;
+                //The amount of garbage will increase by 4 every level.
+                garbage = new Trash[level*4];
+                //Garbage is placed in random positions.
+                for(int i=0;i<garbage.length;i++)
+                    garbage[i]=new Trash(things[random(1,4)-1],random(40,760),random(260,460));
+                //Clocks are placed in random positions
+                for(int i=0;i<clocks.length;i++)
+                    clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
+                //Running time is reset back to 0.
+                runningTime=0;
+                //Inventory is reset back to 0;
+                inventory=0;
+                //Player is spawned at the center of the screen.
+                salX=410;
+                salY=400;
+                }
+            }
         }
+        else{
         //This keeps track of the running time in milliseconds.
         runningTime+=delta;
 
-        //Boots spawning
-        if(boots.getX()==1000&&runningTime>15000) {
-            boots.setX(random(40, 760));
-        }
+        
 
-        //PowerUps spawning
+        //Clocks spawning
         for(int i=0;i<clocks.length;i++)
         {
             if (clocks[i].getX() == 1000 && runningTime > 10000 + (i*10000)) {
@@ -223,17 +303,13 @@ public class game extends BasicGameState {
                     runningTime-=5000;
                 }
         }
-        //Collision detection for the boots.
-        if(salX>boots.getX()-10&&  salX<boots.getX()+28&&  salY>boots.getY()-26&&  salY<boots.getY()+20) {
-            boots.setX(900);
-            boot=2;
-        }
+        
         //If the player collides with the trash can, the inventory is reset back to 0.
         if(salX>trashCan.getX()-14&&salX<trashCan.getX()+30&&salY>trashCan.getY()-5&&salY<trashCan.getY()+30) {
             score+=inventory;
             inventory = 0;
         }
-
+        }
     }
 
     //Checks if the level is beat by checking where the trash is on the screen, and wether the invetory is empty.
@@ -256,3 +332,4 @@ public class game extends BasicGameState {
         return 3;
     }
 }
+
