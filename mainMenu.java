@@ -1,4 +1,4 @@
-package com.company;
+package slick2d.test;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.lwjgl.input.Mouse;
@@ -34,7 +34,8 @@ public class mainMenu extends BasicGameState {
     TrueTypeFont font;
     GradientFill filler1;
     GradientFill filler2;
-
+    Music mainMusic;
+    boolean musicPlaying;
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
     public mainMenu(int state) {
@@ -56,11 +57,12 @@ public class mainMenu extends BasicGameState {
         color1=new Color(150,115,0);
         color2=new Color(171,128,1);
         color3=new Color(58,36,1);
-        awtFont = new Font("TimesRoman", Font.PLAIN, 60);
+        awtFont = new Font("TimesRoman", Font.PLAIN, 50);
         font = new TrueTypeFont(awtFont, false);
         filler1=new GradientFill(100,200,color1,500,300,color1);
         filler2=new GradientFill(100,200,color2,500,300,color2);
-
+        mainMusic=new Music("res/Main menu.wav");
+        musicPlaying=false;
         //Takes a GameContainer and a StateBasedGame object as parameters
         //We declare a new object of the Image clas; the picture we will be using
 
@@ -82,9 +84,13 @@ public class mainMenu extends BasicGameState {
         //I'm commenting it out because the picture goes over the other parts
         //Now we're going to take the mouse location and store it as a variable, and print it wherever the mouse is\n"
         // +
+        if(!musicPlaying)
+        {
+            mainMusic.loop();
+            musicPlaying=true;
+        }
 
-
-        img.draw(0,5);
+        img.draw(0,0);
         //Image face=new Image("Pictures/TreePic.png");
         //g.drawImage(face,500,50);
 
@@ -95,12 +101,14 @@ public class mainMenu extends BasicGameState {
         g.draw(Rect1);
         g.draw(Rect2);
         g.draw(Rect3);
-        font.drawString(260, 50, "Trash Hero", Color.yellow);
+        font.drawString(260, 50, "TRASH HERO", Color.yellow);
         font.drawString(255, 175, "Start Game", color3);
         font.drawString(290, 250, "Credits", color3);
         font.drawString(280, 325, "Controls", color3);
-        if(a)
+        if(a){
+            mainMusic.stop();
             sbg.enterState(3);
+        }
         if(b)
             sbg.enterState(1);
         if(c)
