@@ -1,4 +1,3 @@
-
 package slick2d.test;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
@@ -9,7 +8,12 @@ import java.awt.Font;
 public class credits extends BasicGameState {
    //Extend from BasicGameState so we can have the window created
    public boolean a=false;
-
+   Image img;
+   Font awtFont;
+   TrueTypeFont font;
+   Font awtFont2;
+   TrueTypeFont font2;
+   Input input;
    //A public string that will constantly be updated to show the mouse coordinates
    //We declare a new image and variables for it. We proceed to the init method
    public credits(int state) {
@@ -19,6 +23,12 @@ public class credits extends BasicGameState {
    }
 
    public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+       img = new Image("res/thumbnail.png");
+       awtFont = new Font("Times New Roman", Font.PLAIN, 50);
+       font = new TrueTypeFont(awtFont, false);
+       awtFont2 = new Font("Times New Roman", Font.PLAIN, 40);
+       font2 = new TrueTypeFont(awtFont2, false);
+       input = gc.getInput();
        //2nd Method Declared
        //Takes a GameContainer and a StateBasedGame object as parameters
        //We declare a new object of the Image clas; the picture we will be using
@@ -28,14 +38,9 @@ public class credits extends BasicGameState {
    public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
        //3rd Method; Render allows for graphics; Graphics ALWAYS has the variable g; Text can be drawn with it
        
-       Image img = new Image("res/thumbnail.png");
        img.draw(0,5);
-       Font awtFont = new Font("Times New Roman", Font.PLAIN, 50);
-       TrueTypeFont font = new TrueTypeFont(awtFont, false);
        font.drawString(125, 50, "Game made by: Nico, Andres", Color.yellow);
        font.drawString(300, 150, "Artist: Wei", Color.red);
-       Font awtFont2 = new Font("Times New Roman", Font.PLAIN, 40);
-       TrueTypeFont font2 = new TrueTypeFont(awtFont2, false);
        font2.drawString(50, 275, "Title screen, credits, controls made by Connor", Color.blue);
        font.drawString(600, 400, "BACK →", Color.magenta);
 
@@ -47,8 +52,6 @@ public class credits extends BasicGameState {
 
        int xpos = Mouse.getX();
        int ypos = Mouse.getY();
-       Input input;
-       input = gc.getInput();
        if(xpos<=735&&xpos>=600&&ypos<=89&&ypos>=57&&input.isMousePressed(input.MOUSE_LEFT_BUTTON))
            sbg.enterState(0);
    }
