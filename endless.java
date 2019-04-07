@@ -5,7 +5,7 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.gui.TextField;
 import java.awt.Font;
 
-public class game extends BasicGameState {
+public class endless extends BasicGameState {
     //This is where the player is spawned at the beginning of the level.
     int salX = 410;
     int salY = 400;
@@ -50,7 +50,7 @@ public class game extends BasicGameState {
     int speed;
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
-    public game(int state) {
+    public endless(int state) {
         //1st Method Declared
         //Constructor that accepts the parameters of the game state for mainMenu, so 0;
 
@@ -182,7 +182,7 @@ public class game extends BasicGameState {
             g.drawImage(sal,salX,salY);
         }
         //When the player beats level {number in if statement -1}, the win image will be drawn.
-        if(level==10)
+        if(level==-1)
         {
             g.drawImage(new Image("res/win.png"),0,0);
             font.drawString(500, 160, "Score: "+score, Color.black);
@@ -405,6 +405,6 @@ public class game extends BasicGameState {
     }
     public int getID() {
         //5th Method; Method that returns the ID of this state; Since mainMenu has ID 0, it returns 0
-        return 3;
+        return 4;
     }
 }
