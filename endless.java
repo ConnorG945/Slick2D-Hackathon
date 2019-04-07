@@ -5,10 +5,10 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.gui.TextField;
 import java.awt.Font;
 
-public class endless extends BasicGameState {
+public class game extends BasicGameState {
     //This is where the player is spawned at the beginning of the level.
-    int salX = 410;
-    int salY = 400;
+    int salX;
+    int salY;
     //All of these will be initialized in the init method.
     int inventory;
     int level;
@@ -48,14 +48,20 @@ public class endless extends BasicGameState {
     boolean shopPlaying;
     Music powerCollect;
     int speed;
+    Image backnet;
+    Image frontnet;
+    Image leftnet;
+    Image rightnet;
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
-    public endless(int state) {
+    public game(int state) {
         //1st Method Declared
         //Constructor that accepts the parameters of the game state for mainMenu, so 0;
 
     }
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        salX=410;
+        salY=400;
         //Everything here is initialized when the game starts.
         input = gc.getInput();
         //Your score starts at 0.
@@ -71,6 +77,10 @@ public class endless extends BasicGameState {
         left = new Image("res/left.png");
         front = new Image("res/front.png");
         back = new Image("res/back.png");
+        backnet = new Image("res/back-net.png");
+        frontnet = new Image("res/front-net.png");
+        rightnet = new Image("res/right-net.png");
+        leftnet = new Image("res/left-net.png");
         //Initiates the character facing forward at the start of the game
         sal = front;
         //These are to print words.
@@ -181,19 +191,15 @@ public class endless extends BasicGameState {
                 g.drawImage(clock.getG(),clock.getX(),clock.getY());
             g.drawImage(sal,salX,salY);
         }
-        //When the player beats level {number in if statement -1}, the win image will be drawn.
-        if(level==-1)
-        {
-            g.drawImage(new Image("res/win.png"),0,0);
-            font.drawString(530, 170, "Score: "+score, Color.black);
-        }
-        else
+        
+
        /*If the player has not emptied out all the bargage on the screen into the trash can
          before 30 seconds, the lose screen will be drawn. */
-        if(runningTime>30000+extraTime) {
-            g.drawImage(new Image("res/endgame.png"), 0, 0);
-            font.drawString(600, 220, "Score: "+score, Color.black);
-        }
+            if(runningTime>30000+extraTime) {
+                g.drawImage(new Image("res/endgame.png"), 0, 0);
+                font.drawString(600, 220, "Score: "+score, Color.black);
+                font.drawString(270, 460, "Press R to restart", Color.black);
+            }
 
 
     }
@@ -202,136 +208,127 @@ public class endless extends BasicGameState {
         //4th Method; Takes 3 parameters; Updates images on screen; Essentially allows for stuff to move around/ have
         //animation on screen
         //If a player has beat a level, it resets everything and moves to the next level.
-        if(win(garbage,inventory))
-        {
-            if(level%2==0)
-            {
-                if(!inShop)
-                {
-                    salX=5;
-                    salY=265;
+        if(input.isKeyDown(Input.KEY_R)){
+            gc.reinit();
+        }
+        if (win(garbage, inventory)) {
+            if (level % 2 == 0) {
+                if (!inShop) {
+                    salX = 5;
+                    salY = 265;
                 }
-                inShop=true;
+                inShop = true;
             }
-            if(inShop)
-            {
-                if(!shopPlaying)
-                {
+            if (inShop) {
+                if (!shopPlaying) {
                     mainLoop.stop();
-                    mainPlaying=false;
+                    mainPlaying = false;
                     shopLoop.loop();
-                    shopPlaying=true;
+                    shopPlaying = true;
                 }
-                if(input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
-                    salX += 2;
+                if (input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
+                    salX += 4+boot;
                     sal = right;
                 }
-                if(input.isKeyDown(Input.KEY_A) && salX > 0) {
-                    salX -= 2;
+                if (input.isKeyDown(Input.KEY_A) && salX > 0) {
+                    salX -= 4 +boot;
                     sal = left;
                 }
-                if(input.isKeyDown(Input.KEY_W) && salY > 100) {
-                    salY -= 2;
+                if (input.isKeyDown(Input.KEY_W) && salY > 100) {
+                    salY -= 4+boot;
                     sal = back;
                 }
-                if(input.isKeyDown(Input.KEY_S) && salY < 500 - 32) {
-                    salY += 2;
+                if (input.isKeyDown(Input.KEY_S) && salY < 500 - 32) {
+                    salY += 4+boot;
                     sal = front;
                 }
-                if(!hasBackpack&&salX>backpack.getX()-10&&  salX<backpack.getX()+28&&  salY>backpack.getY()-26&&  salY<backpack.getY()+20) {
-                    hasBackpack=true;
-                    ups[items]=backpack.getG();
+                if (!hasBackpack && salX > backpack.getX() - 10 && salX < backpack.getX() + 28 && salY > backpack.getY() - 26 && salY < backpack.getY() + 20) {
+                    hasBackpack = true;
+                    ups[items] = backpack.getG();
                     items++;
                 }
-                if(!hasNet&&salX>net.getX()-10&&  salX<net.getX()+28&&  salY>net.getY()-26&&  salY<net.getY()+20) {
-                    hasNet=true;
-                    ups[items]=net.getG();
+                if (!hasNet && salX > net.getX() - 10 && salX < net.getX() + 28 && salY > net.getY() - 26 && salY < net.getY() + 20) {
+                    hasNet = true;
+                    ups[items] = net.getG();
                     items++;
                 }
-                if(!hasBoots&&salX>boots.getX()-10&&  salX<boots.getX()+28&&  salY>boots.getY()-26&&  salY<boots.getY()+20) {
-                    hasBoots=true;
-                    ups[items]=boots.getG();
+                if (!hasBoots && salX > boots.getX() - 10 && salX < boots.getX() + 28 && salY > boots.getY() - 26 && salY < boots.getY() + 20) {
+                    hasBoots = true;
+                    ups[items] = boots.getG();
                     items++;
+                    boot=2;
                 }
-                if(!hasClock&&salX>clock.getX()-10&&  salX<clock.getX()+28&&  salY>clock.getY()-26&&  salY<clock.getY()+20) {
-                    hasClock=true;
-                    ups[items]=clock.getG();
+                if (!hasClock && salX > clock.getX() - 10 && salX < clock.getX() + 28 && salY > clock.getY() - 26 && salY < clock.getY() + 20) {
+                    hasClock = true;
+                    ups[items] = clock.getG();
                     items++;
                 }
                 //Exiting the Shop
-                if(salX>650)
-                {
+                if (salX > 650) {
                     shopLoop.stop();
-                    shopPlaying=false;
-                    inShop=false;
+                    shopPlaying = false;
+                    inShop = false;
                     //Increases the level.
                     level++;
                     //The amount of garbage will increase by 4 every level.
-                    garbage = new Trash[level*4];
+                    garbage = new Trash[level * 4];
                     //Garbage is placed in random positions.
-                    for(int i=0;i<garbage.length;i++)
-                        garbage[i]=new Trash(things[random(1,4)-1],random(40,760),random(260,460));
+                    for (int i = 0; i < garbage.length; i++)
+                        garbage[i] = new Trash(things[random(1, 4) - 1], random(40, 760), random(260, 460));
                     //Clocks are placed in random positions
-                    for(int i=0;i<clocks.length;i++)
-                        clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
+                    for (int i = 0; i < clocks.length; i++)
+                        clocks[i] = new Trash(new Image("res/clock2.png"), 1000, random(260, 460));
                     //Running time is reset back to 0.
-                    runningTime=0;
+                    runningTime = 0;
                     //Inventory is reset back to 0;
-                    inventory=0;
+                    inventory = 0;
                     //Player is spawned at the center of the screen.
-                    salX=410;
-                    salY=400;
+                    salX = 410;
+                    salY = 400;
                 }
-            }
-            else
-            {
+            } else {
                 //Increases the level.
                 level++;
                 //The amount of garbage will increase by 4 every level.
-                garbage = new Trash[level*4];
+                garbage = new Trash[level * 4];
                 //Garbage is placed in random positions.
-                for(int i=0;i<garbage.length;i++)
-                    garbage[i]=new Trash(things[random(1,4)-1],random(40,760),random(260,460));
+                for (int i = 0; i < garbage.length; i++)
+                    garbage[i] = new Trash(things[random(1, 4) - 1], random(40, 760), random(260, 460));
                 //Clocks are placed in random positions
-                for(int i=0;i<clocks.length;i++)
-                    clocks[i]=new Trash(new Image("res/clock2.png"),1000,random(260,460));
+                for (int i = 0; i < clocks.length; i++)
+                    clocks[i] = new Trash(new Image("res/clock2.png"), 1000, random(260, 460));
                 //Running time is reset back to 0.
-                runningTime=0;
+                runningTime = 0;
                 //Inventory is reset back to 0;
-                inventory=0;
+                inventory = 0;
                 //Player is spawned at the center of the screen.
-                salX=410;
-                salY=400;
+                salX = 410;
+                salY = 400;
             }
-        }
-        else{
-            if(!mainPlaying)
-            {
-                mainPlaying=true;
+        } else {
+            if (!mainPlaying) {
+                mainPlaying = true;
                 mainLoop.loop();
             }
             //This keeps track of the running time in milliseconds.
-            runningTime+=delta;
+            runningTime += delta;
 
-            if(hasBoots)
-                boot=2;
+
 
             speed = 4 - inventory + boot;
 
-            if(hasBackpack){
-                speed=4-(inventory/2)+boot;
-                maxInv=6;
+            if (hasBackpack) {
+                speed = 4 - (inventory / 2) + boot;
+                maxInv = 6;
             }
 
-            if(hasClock)
-                extraTime=10000;
-
+            if (hasClock)
+                extraTime = 10000;
 
 
             //Clocks spawning
-            for(int i=0;i<clocks.length;i++)
-            {
-                if (clocks[i].getX() == 1000 && runningTime > 10000 + (i*10000)) {
+            for (int i = 0; i < clocks.length; i++) {
+                if (clocks[i].getX() == 1000 && runningTime > 10000 + (i * 10000)) {
                     clocks[i].setX(random(40, 760));
                 }
             }
@@ -339,7 +336,7 @@ public class endless extends BasicGameState {
          the more garbage is in the inventory, the slower the character is.
          The character also changes states based on what direction it is going.
        */
-            if(runningTime<30000+extraTime) {
+            if (runningTime < 30000 + extraTime) {
                 if (input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
                     salX += speed;
                     sal = right;
@@ -356,35 +353,57 @@ public class endless extends BasicGameState {
                     salY += speed;
                     sal = front;
                 }
-            }
+                if (runningTime < 30000 +extraTime && hasNet) {
+                    if (input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
+                        salX += speed;
+                        sal = rightnet;
+                    }
+                    if (input.isKeyDown(Input.KEY_A) && salX > 0) {
+                        salX -= speed;
+                        sal = leftnet;
+                    }
+                    if (input.isKeyDown(Input.KEY_W) && salY > 220) {
+                        salY -= speed;
+                        sal = backnet;
+                    }
+                    if (input.isKeyDown(Input.KEY_S) && salY < 500 - 32) {
+                        salY += speed;
+                        sal = frontnet;
+                    }
+
+                }
        /*This is the collision detection between the character, the trash can, and the garbage.
          If the player collides with garbage, the garbage is taken off the screen by setting its x to 1000,
          and the inventory is increased by 1. If the player collides with the trash can,
          the inventory is reset back to 0.
        */
-            for(int i=0;i<garbage.length;i++)
-            {
-                if(inventory<maxInv)
-                {
-                    if(salX>garbage[i].getX()-10&&  salX<garbage[i].getX()+28&&  salY>garbage[i].getY()-26&&  salY<garbage[i].getY()+20) {
-                        garbage[i].setX(1000);
-                        inventory++;
+                for (int i = 0; i < garbage.length; i++) {
+                    if (inventory < maxInv) {
+                        if(hasNet&&salX > garbage[i].getX() - 15 && salX < garbage[i].getX() + 33 && salY > garbage[i].getY() - 26 && salY < garbage[i].getY() + 20)
+                        {
+                            garbage[i].setX(1000);
+                            inventory++;
+                        }
+                        else
+                        if (salX > garbage[i].getX() - 10 && salX < garbage[i].getX() + 28 && salY > garbage[i].getY() - 26 && salY < garbage[i].getY() + 20) {
+                            garbage[i].setX(1000);
+                            inventory++;
+                        }
                     }
                 }
-            }
-            //Collision detection for powerUps. If a clock is collected, 5 seconds will be added to the time.
-            for(int i=0;i<clocks.length;i++)
-            {
-                if(salX>clocks[i].getX()-10&&  salX<clocks[i].getX()+28&&  salY>clocks[i].getY()-26&&  salY<clocks[i].getY()+20) {
-                    clocks[i].setX(900);
-                    runningTime-=5000;
+                //Collision detection for powerUps. If a clock is collected, 5 seconds will be added to the time.
+                for (int i = 0; i < clocks.length; i++) {
+                    if (salX > clocks[i].getX() - 10 && salX < clocks[i].getX() + 28 && salY > clocks[i].getY() - 26 && salY < clocks[i].getY() + 20) {
+                        clocks[i].setX(900);
+                        runningTime -= 5000;
+                    }
                 }
-            }
 
-            //If the player collides with the trash can, the inventory is reset back to 0.
-            if(salX>trashCan.getX()-14&&salX<trashCan.getX()+30&&salY>trashCan.getY()-5&&salY<trashCan.getY()+30) {
-                score+=inventory;
-                inventory = 0;
+                //If the player collides with the trash can, the inventory is reset back to 0.
+                if (salX > trashCan.getX() - 14 && salX < trashCan.getX() + 30 && salY > trashCan.getY() - 5 && salY < trashCan.getY() + 30) {
+                    score += inventory;
+                    inventory = 0;
+                }
             }
         }
     }
@@ -406,6 +425,9 @@ public class endless extends BasicGameState {
     }
     public int getID() {
         //5th Method; Method that returns the ID of this state; Since mainMenu has ID 0, it returns 0
-        return 4;
+        return 3;
     }
 }
+
+
+
