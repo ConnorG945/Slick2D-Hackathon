@@ -58,7 +58,7 @@ public class mainMenu extends BasicGameState {
         Rect5=new RoundedRectangle(239,199,320,70,20);
         Rect6=new RoundedRectangle(208,274,404,70,20);
         Rect7=new RoundedRectangle(100,357,622,63,20);
-        Rect8=new RoundedRectangle(105,357,622,70,20);
+        Rect8=new RoundedRectangle(100,352,622,70,20);
 
 
         color1=new Color(150,115,0);
@@ -105,6 +105,7 @@ public class mainMenu extends BasicGameState {
         g.draw(Rect1);
         g.draw(Rect2);
         g.draw(Rect3);
+        g.draw(Rect7);
         font.drawString(260, 50, "Trash Hero", Color.yellow);
         font.drawString(255, 125, "Start Game", color3);
         font.drawString(290, 200, "Credits", color3);

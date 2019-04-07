@@ -190,8 +190,8 @@ public class game extends BasicGameState {
        /*If the player has not emptied out all the bargage on the screen into the trash can
          before 30 seconds, the lose screen will be drawn. */
         if(runningTime>30000+extraTime&&level!=1) {
-            g.drawImage(new Image("res/lose.png"), 0, 0);
-            font.drawString(550, 160, "Score: "+score, Color.black);
+            g.drawImage(new Image("res/endgame.png"), 0, 0);
+            font.drawString(600, 220, "Score: "+score, Color.black);
         }
 
 
