@@ -93,7 +93,7 @@ public class mainMenu extends BasicGameState {
         // +
 
 
-        img.draw(0,0);
+        img.draw(0,5);
         //Image face=new Image("Pictures/TreePic.png");
         //g.drawImage(face,500,50);
 
@@ -205,3 +205,4 @@ public class mainMenu extends BasicGameState {
         return 0;
     }
 }
+
