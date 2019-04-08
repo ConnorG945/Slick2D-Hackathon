@@ -64,7 +64,7 @@ public class mainMenu extends BasicGameState {
         color1=new Color(150,115,0);
         color2=new Color(171,128,1);
         color3=new Color(58,36,1);
-        awtFont = new Font("TimesRoman", Font.PLAIN, 60);
+        awtFont = new Font("Calibri", Font.PLAIN, 60);
         font = new TrueTypeFont(awtFont, false);
         filler1=new GradientFill(100,200,color1,500,300,color1);
         filler2=new GradientFill(100,200,color2,500,300,color2);
@@ -93,7 +93,7 @@ public class mainMenu extends BasicGameState {
         // +
 
 
-        img.draw(0,5);
+        img.draw(0,0);
         //Image face=new Image("Pictures/TreePic.png");
         //g.drawImage(face,500,50);
 
@@ -205,4 +205,3 @@ public class mainMenu extends BasicGameState {
         return 0;
     }
 }
-

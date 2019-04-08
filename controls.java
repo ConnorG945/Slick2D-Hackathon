@@ -75,7 +75,7 @@ public class controls extends BasicGameState {
         font.drawString(100,300,"The more you have, the slower you go.", Color.black);
         font.drawString(125,350,"Empty out your inventory at the trash.", Color.black);
         font.drawString(550, 400, "BACK →", Color.magenta);
-        font.drawString(150,350, "x: "+xpos+" y: "+ypos);
+       // font.drawString(150,350, "x: "+xpos+" y: "+ypos);
 
 
 

@@ -1,10 +1,7 @@
 package com.company;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.*;
-import org.newdawn.slick.Game;
 import org.newdawn.slick.state.*;
-
+//Multithreading might solve the music issue
 public class Main extends StateBasedGame {
     //Slick 2D requires that the class inherits all the methods from StateBasedGame
     //The methods are abstract though, so they can be manipulated
@@ -16,7 +13,7 @@ public class Main extends StateBasedGame {
     public static final int credits = 1;
     public static final int controls = 2;
     public static final int game = 3;
-    public static final int endless=4;
+    public static final int endless = 4;
     //public static final int controlScreen = 1;
     //public static final int play = 2;
     //Give each state of the game a integer so it can be called later
@@ -85,7 +82,8 @@ public class Main extends StateBasedGame {
             appgc = new AppGameContainer(new Main(gameName));
             //Essentially says we're making a window that will hold a game, the one that is being created with the name
             //gameName (Or Golden Portals as that variable is equivalent to)
-            appgc.setDisplayMode(800, 500, false);
+            appgc.setDisplayMode(800,500,false);
+            //800 500
             appgc.setTargetFrameRate(60);
             //Alternatively, appgc.setDisplayMode(length,width,false) (The last parameter asks if fullscreen is desired
             appgc.start();
@@ -100,8 +98,3 @@ public class Main extends StateBasedGame {
         }
     }
 }
-
-
-
-
-

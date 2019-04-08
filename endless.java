@@ -5,7 +5,7 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.gui.TextField;
 import java.awt.Font;
 
-public class game extends BasicGameState {
+public class endless extends BasicGameState {
     //This is where the player is spawned at the beginning of the level.
     int salX;
     int salY;
@@ -25,6 +25,7 @@ public class game extends BasicGameState {
     Image left;
     Image backGround;
     int runningTime;
+    int totalTime;
     Font awtFont;
     TrueTypeFont font;
     Input input;
@@ -52,9 +53,11 @@ public class game extends BasicGameState {
     Image frontnet;
     Image leftnet;
     Image rightnet;
+    Trash[] coins;
+    int currency;
     //A public string that will constantly be updated to show the mouse coordinates
     //We declare a new image and variables for it. We proceed to the init method
-    public game(int state) {
+    public endless(int state) {
         //1st Method Declared
         //Constructor that accepts the parameters of the game state for mainMenu, so 0;
 
@@ -72,6 +75,7 @@ public class game extends BasicGameState {
         level=1;
         //The runningTime of the game starts at 0.
         runningTime=0;
+        totalTime=30000;
         //These initiates the images for the character going in different directions.
         right = new Image("res/right.png");
         left = new Image("res/left.png");
@@ -116,13 +120,19 @@ public class game extends BasicGameState {
         //Generates the backpack
         backpack= new Trash(new Image("res/backpack.png"),94, 165);
         maxInv=3;
+        coins = new Trash[random(1,3)];
+        for(int i=0;i<coins.length;i++)
+        {
+            coins[i]=new Trash(new Image("res/coinframe1.png"),1000,random(260,460));
+        }
+        currency=0;
         //Generates the net
         net=new Trash(new Image("res/net.png"),388, 163);
         //Generates the clock
         clock=new Trash(new Image("res/clock.png"), 98, 365);
         //How many powerups you have
         items=0;
-        //Powerups array to be displayed after Items: durning the game
+        //Powerups array to be displayed after Items: during the game
         ups=new Image[4];
         hasBackpack=false;
         hasBoots=false;
@@ -150,6 +160,9 @@ public class game extends BasicGameState {
         //Draws the clocks
         for(int i=0;i<clocks.length;i++)
             g.drawImage(clocks[i].getG(),clocks[i].getX(),clocks[i].getY());
+        for(int i=0;i<coins.length;i++)
+            g.drawImage(coins[i].getG(),coins[i].getX(),coins[i].getY());
+        //Draws the trash can.
         //Draws the trash can.
         g.drawImage(trashCan.getG(),trashCan.getX(),trashCan.getY());
         //Draws the player.
@@ -162,15 +175,15 @@ public class game extends BasicGameState {
        /*Draws the player's time remaining starting from 30 and counting down.
          It starts as black, but when there are 15 seconds remaining, the color changes to orange,
          and when there is 5 seconds remaining, the color changes to red.*/
-        if(runningTime>15000+extraTime)
+        if(totalTime-runningTime<15000)
         {
-            if(runningTime>25000+extraTime)
-                font.drawString(50, 20, "Time: "+((30+extraTime/1000)-runningTime/1000), Color.red);
+            if(totalTime-runningTime<5000)
+                font.drawString(50, 20, "Time: "+((totalTime/1000)-(runningTime/1000)), Color.red);
             else
-                font.drawString(50, 20, "Time: "+((30+extraTime/1000)-runningTime/1000), Color.orange);
+                font.drawString(50, 20, "Time: "+((totalTime/1000)-(runningTime/1000)), Color.orange);
         }
         else
-            font.drawString(50, 20, "Time: "+((30+extraTime/1000)-runningTime/1000), Color.black);
+            font.drawString(50, 20, "Time: "+((totalTime/1000)-(runningTime/1000)), Color.black);
 
         font.drawString(50, 60, "Items:", Color.black);
         for(int i=0;i<items;i++)
@@ -191,11 +204,11 @@ public class game extends BasicGameState {
                 g.drawImage(clock.getG(),clock.getX(),clock.getY());
             g.drawImage(sal,salX,salY);
         }
-        
+
 
        /*If the player has not emptied out all the bargage on the screen into the trash can
          before 30 seconds, the lose screen will be drawn. */
-            if(runningTime>30000+extraTime) {
+            if(runningTime>totalTime) {
                 g.drawImage(new Image("res/endgame.png"), 0, 0);
                 font.drawString(600, 220, "Score: "+score, Color.black);
                 font.drawString(270, 460, "Press R to restart", Color.black);
@@ -278,6 +291,11 @@ public class game extends BasicGameState {
                     //Clocks are placed in random positions
                     for (int i = 0; i < clocks.length; i++)
                         clocks[i] = new Trash(new Image("res/clock2.png"), 1000, random(260, 460));
+                    coins = new Trash[random(1,3)];
+                    for(int i=0;i<coins.length;i++)
+                    {
+                        coins[i]=new Trash(new Image("res/coinframe1.png"),1000,random(260,460));
+                    }
                     //Running time is reset back to 0.
                     runningTime = 0;
                     //Inventory is reset back to 0;
@@ -297,6 +315,11 @@ public class game extends BasicGameState {
                 //Clocks are placed in random positions
                 for (int i = 0; i < clocks.length; i++)
                     clocks[i] = new Trash(new Image("res/clock2.png"), 1000, random(260, 460));
+                coins = new Trash[random(1,3)];
+                for(int i=0;i<coins.length;i++)
+                {
+                    coins[i]=new Trash(new Image("res/coinframe1.png"),1000,random(260,460));
+                }
                 //Running time is reset back to 0.
                 runningTime = 0;
                 //Inventory is reset back to 0;
@@ -322,9 +345,10 @@ public class game extends BasicGameState {
                 maxInv = 6;
             }
 
-            if (hasClock)
+            if (hasClock) {
                 extraTime = 10000;
-
+                totalTime=40000;
+            }
 
             //Clocks spawning
             for (int i = 0; i < clocks.length; i++) {
@@ -332,11 +356,17 @@ public class game extends BasicGameState {
                     clocks[i].setX(random(40, 760));
                 }
             }
+            //Coins spawning
+            for (int i = 0; i < coins.length; i++) {
+                if (coins[i].getX() == 1000 && runningTime > 5000 + (i * 10000)) {
+                    coins[i].setX(random(40, 760));
+                }
+            }
        /*WASD controls the character. The speed is affected by the inventory,
          the more garbage is in the inventory, the slower the character is.
          The character also changes states based on what direction it is going.
        */
-            if (runningTime < 30000 + extraTime) {
+            if (runningTime < totalTime) {
                 if (input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
                     salX += speed;
                     sal = right;
@@ -353,7 +383,7 @@ public class game extends BasicGameState {
                     salY += speed;
                     sal = front;
                 }
-                if (runningTime < 30000 +extraTime && hasNet) {
+                if (runningTime < totalTime&& hasNet) {
                     if (input.isKeyDown(Input.KEY_D) && salX < 800 - 16) {
                         salX += speed;
                         sal = rightnet;
@@ -398,7 +428,13 @@ public class game extends BasicGameState {
                         runningTime -= 5000;
                     }
                 }
-
+                for (int i = 0; i < coins.length; i++) {
+                    if (salX > coins[i].getX() - 10 && salX < coins[i].getX() + 28 && salY > coins[i].getY() - 26 && salY < coins[i].getY() + 20) {
+                        coins[i].setX(900);
+                        currency++;
+                    }
+                }
+                //Collision for coins
                 //If the player collides with the trash can, the inventory is reset back to 0.
                 if (salX > trashCan.getX() - 14 && salX < trashCan.getX() + 30 && salY > trashCan.getY() - 5 && salY < trashCan.getY() + 30) {
                     score += inventory;
@@ -425,7 +461,7 @@ public class game extends BasicGameState {
     }
     public int getID() {
         //5th Method; Method that returns the ID of this state; Since mainMenu has ID 0, it returns 0
-        return 3;
+        return 4;
     }
 }
 
