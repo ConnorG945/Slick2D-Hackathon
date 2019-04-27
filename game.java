@@ -191,8 +191,7 @@ public class game extends BasicGameState {
 
         if(inShop)
         {
-            g.drawImage(shop,0,0);\
-            font.drawString(50, 460, "Coins: "+currency, Color.yellow);
+            g.drawImage(shop,0,0);
             if(!hasBackpack)
                 g.drawImage(backpack.getG(),backpack.getX(),backpack.getY());
             if(!hasNet)
@@ -206,7 +205,7 @@ public class game extends BasicGameState {
         //When the player beats level {number in if statement -1}, the win image will be drawn.
         if(level==10)
         {
-            g.drawImage(new Image("res/win.png"),0,0);
+            g.drawImage(new Image("res/endgame.png"),0,0);
             font.drawString(500, 160, "Score: "+score, Color.black);
             font.drawString(270, 460, "Press R to restart", Color.black);
         }
@@ -260,30 +259,26 @@ public class game extends BasicGameState {
                     salY += 4+boot;
                     sal = front;
                 }
-                if (!hasBackpack && currency >= 7 && salX > backpack.getX() - 10 && salX < backpack.getX() + 28 && salY > backpack.getY() - 26 && salY < backpack.getY() + 20) {
+                if (!hasBackpack && salX > backpack.getX() - 10 && salX < backpack.getX() + 28 && salY > backpack.getY() - 26 && salY < backpack.getY() + 20) {
                     hasBackpack = true;
                     ups[items] = backpack.getG();
                     items++;
-                    currency-=7;
                 }
-                if (!hasNet && currency >= 6 && salX > net.getX() - 10 && salX < net.getX() + 28 && salY > net.getY() - 26 && salY < net.getY() + 20) {
+                if (!hasNet && salX > net.getX() - 10 && salX < net.getX() + 28 && salY > net.getY() - 26 && salY < net.getY() + 20) {
                     hasNet = true;
                     ups[items] = net.getG();
                     items++;
-                    currency-=6;
                 }
-                if (!hasBoots && currency >= 5 && salX > boots.getX() - 10 && salX < boots.getX() + 28 && salY > boots.getY() - 26 && salY < boots.getY() + 20) {
+                if (!hasBoots && salX > boots.getX() - 10 && salX < boots.getX() + 28 && salY > boots.getY() - 26 && salY < boots.getY() + 20) {
                     hasBoots = true;
                     ups[items] = boots.getG();
                     items++;
                     boot=2;
-                    currency-=5;
                 }
-                if (!hasClock && currency >= 3 && salX > clock.getX() - 10 && salX < clock.getX() + 28 && salY > clock.getY() - 26 && salY < clock.getY() + 20) {
+                if (!hasClock && salX > clock.getX() - 10 && salX < clock.getX() + 28 && salY > clock.getY() - 26 && salY < clock.getY() + 20) {
                     hasClock = true;
                     ups[items] = clock.getG();
                     items++;
-                    currency-=3;
                 }
                 //Exiting the Shop
                 if (salX > 650) {
